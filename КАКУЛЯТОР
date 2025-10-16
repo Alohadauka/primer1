@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Калькулятор идеального веса</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #f97316;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --radius: 12px;
+      --maxw: 420px;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #0f172a, #1e293b);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      width: 100%;
+      max-width: var(--maxw);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 6px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #fb923c;
+    }
+
+    .result {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 20px; }
+      h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Калькулятор идеального веса</h1>
+    <label for="height">Рост (см):</label>
+    <input type="number" id="height" placeholder="Например, 175" />
+
+    <label for="age">Возраст (лет):</label>
+    <input type="number" id="age" placeholder="Например, 25" />
+
+    <label for="gender">Пол:</label>
+    <select id="gender">
+      <option value="male">Мужчина</option>
+      <option value="female">Женщина</option>
+    </select>
+
+    <button id="calcBtn">Рассчитать</button>
+
+    <div class="result" id="result"></div>
+    <div class="muted">Формула: Devine с поправкой по возрасту</div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('calcBtn');
+    const res = document.getElementById('result');
+
+    btn.addEventListener('click', () => {
+      const height = parseFloat(document.getElementById('height').value);
+      const age = parseInt(document.getElementById('age').value);
+      const gender = document.getElementById('gender').value;
+
+      if (!height || !age) {
+        res.textContent = 'Пожалуйста, введите рост и возраст.';
+        return;
+      }
+
+      let idealWeight;
+
+      if (gender === 'male') {
+        idealWeight = 50 + 0.9 * (height - 152);
+      } else {
+        idealWeight = 45.5 + 0.9 * (height - 152);
+      }
+
+      // Поправка по возрасту (±3%)
+      if (age < 25) idealWeight *= 0.97;
+      else if (age > 50) idealWeight *= 1.03;
+
+      res.innerHTML = `Ваш идеальный вес: <span style="color: var(--accent)">${idealWeight.toFixed(1)} кг</span>`;
+    });
+  </script>
+</body>
+</html>
